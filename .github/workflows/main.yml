@@ -1,0 +1,41 @@
+name: 唐立定制5分钟策略
+
+on:
+  # 1. 新增：这是关键！允许接收外部的 "start-work" 指令
+  repository_dispatch:
+    types: [start-work]
+
+  # 2. 保留：允许手动点击按钮运行
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v3
+
+      - name: 设置 Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # 开启缓存，加快后续运行速度
+
+      - name: 安装依赖库
+        # 如果你的仓库里有 requirements.txt，建议用 pip install -r requirements.txt
+        # 这里为了保险，直接指定安装这三个库
+        run: |
+          pip install --upgrade pip
+          pip install pandas requests ccxt
+
+      - name: 执行 OKX 多空双向扫描
+        run: python tangli-5m.py
+        env:
+          # 虽然 Cron 是 UTC，但在代码运行时设置环境变量为上海时间
+          # 有助于 Python 脚本内的 print 或日志显示正确的时间
+          TZ: Asia/Shanghai
+          
+          # ⚠️ 重要提示：如果你的脚本需要交易所 API Key，请在这里添加（需要先在仓库 Settings -> Secrets 里配置）
+          # API_KEY: ${{ secrets.OKX_API_KEY }}
+          # SECRET_KEY: ${{ secrets.OKX_SECRET_KEY }}
