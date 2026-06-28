@@ -17,6 +17,7 @@ UIDS = [
     'UID_2GGbSwMDZFFBBkj4HKTauQAv8oJz'
     'UID_IDzkhzteowCRWTM7TfmDZvtODwJZ'
     'UID_SL7WeaH8fCIYzTTNDTk9EpAMy8oD'
+    'UID_cEnTZVBsOm1FiSnpnPdK2xJopDdh'
 ]
 
 # 初始化 OKX
